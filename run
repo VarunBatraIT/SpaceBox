@@ -3,4 +3,5 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$GOBIN
 export TMPDIR="/tmp/"
 git config --global user.name "$GIT_USERNAME"
 git config --global user.email "$GIT_EMAIL"
-stty stop '' -ixoff ; /usr/local/bin/nvim $@
+cd ~/src/
+stty stop '' -ixoff ; nvim $@
