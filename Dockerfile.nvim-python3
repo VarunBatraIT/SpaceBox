@@ -85,13 +85,13 @@ RUN mkdir -p $HOME/.config $HOME/.SpaceVim.d
 
 RUN pip install --user neovim pipenv
 
-RUN curl https://raw.githubusercontent.com/SpaceVim/SpaceVim/master/docker/init.toml > $HOME/.SpaceVim.d/init.toml
+COPY init.toml $HOME/.SpaceVim.d/init.toml
 
 RUN curl -sLf https://spacevim.org/install.sh | bash
 
-RUN nvim --headless +'call dein#install()' +qall
+RUN sudo apt-get install -y cscope
 
-RUN rm $HOME/.SpaceVim.d/init.toml
+
 ENV UHOME="/home/spacevim"
 ENV GOROOT="/usr/lib/go"
 ENV GOBIN="$GOROOT/bin"
@@ -147,7 +147,9 @@ RUN go get -v -u -d github.com/sourcegraph/go-langserver \
     && go build -o $GOBIN/go-langserver github.com/sourcegraph/go-langserver
 RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.16.0
 
-RUN sudo apt-get install -y cscope
+RUN nvim --headless +'call dein#install()' +qall
+
+
 ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
 COPY init.toml $HOME/.SpaceVim.d/init.toml
 COPY run $UHOME/

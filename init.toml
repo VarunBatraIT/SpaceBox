@@ -5,10 +5,14 @@
 # URL: https://spacevim.org
 #=============================================================================
 
+
 # SpaceVim options {{{
 [options]
     # vimcompatible = true
     # enable_language_specific_leader = false
+    plugin_manager_max_processes = 2
+    plugin_manager_processes = 2
+    vim_help_language = 'en'
 # }}}
 
 ## -- SpaceVim layer list start
