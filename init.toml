@@ -13,6 +13,20 @@
     plugin_manager_max_processes = 2
     plugin_manager_processes = 2
     vim_help_language = 'en'
+    vim_updatetime = 100
+    bootstrap_before = "myspacevim#before"
+# }}}
+
+
+# custom plugins {{{
+[[custom_plugins]]
+  name = 'bogado/file-line'
+  merged = 0
+# }}}
+# custom plugins {{{
+[[custom_plugins]]
+  name = 'airblade/vim-gitgutter'
+  merged = 0
 # }}}
 
 ## -- SpaceVim layer list start
