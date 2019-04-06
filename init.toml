@@ -13,8 +13,8 @@
     plugin_manager_max_processes = 2
     plugin_manager_processes = 2
     vim_help_language = 'en'
-    vim_updatetime = 100
     bootstrap_before = "myspacevim#before"
+
 # }}}
 
 
