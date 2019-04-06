@@ -108,8 +108,8 @@ RUN go get -v -u -d github.com/klauspost/asmfmt/cmd/asmfmt \
     && go get -v -u -d github.com/kisielk/errcheck \
     && go build -o $GOBIN/errcheck github.com/kisielk/errcheck \
     && go get -v -u -d github.com/davidrjenni/reftools/cmd/fillstruct \
-    && go build -o $GOBIN/fillstruct github.com/davidrjenni/reftools/cmd/fillstruct
-RUN go get -v -u -d github.com/rogpeppe/godef \
+    && go build -o $GOBIN/fillstruct github.com/davidrjenni/reftools/cmd/fillstruct \
+    && go get -v -u -d github.com/rogpeppe/godef \
     && go build -o $GOBIN/godef github.com/rogpeppe/godef \
     && go get -v -u -d github.com/zmb3/gogetdoc \
     && go build -o $GOBIN/gogetdoc github.com/zmb3/gogetdoc \
