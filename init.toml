@@ -20,9 +20,17 @@
 
 # custom plugins {{{
 [[custom_plugins]]
+  name = 'chr4/nginx.vim'
+  merged = 0
+# }}}
+
+# custom plugins {{{
+[[custom_plugins]]
   name = 'bogado/file-line'
   merged = 0
 # }}}
+
+
 # custom plugins {{{
 [[custom_plugins]]
   name = 'airblade/vim-gitgutter'
