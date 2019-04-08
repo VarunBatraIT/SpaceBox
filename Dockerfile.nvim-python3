@@ -85,6 +85,12 @@ RUN mkdir -p $HOME/.config $HOME/.SpaceVim.d
 
 RUN pip install --user neovim pipenv
 
+# Install clipboard support
+RUN sudo apt-get install -y xclip latexmk xsel
+
+RUN sudo npm install -g neovim
+
+
 COPY init.toml $HOME/.SpaceVim.d/init.toml
 
 RUN curl -sLf https://spacevim.org/install.sh | bash

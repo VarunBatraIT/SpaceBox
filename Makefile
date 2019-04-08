@@ -1,2 +1,2 @@
 build:
-		docker build -t nvim -f Dockerfile.nvim-python3 .
+		docker build -t varunbatrait/spacebox -f Dockerfile.nvim-python3 .
