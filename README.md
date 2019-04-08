@@ -1,41 +1,21 @@
-## SpaceVim and Neovim in Docker
+## SpaceVim in Docker
 
-![Docker Build Status](https://img.shields.io/docker/build/spacevim/spacevim.svg)
+Tested and working:
 
-This Dockerfile builds neovim `HEAD` and installs the latest available version of SpaceVim. You might want to use this for several reasons:
+- Golang Hints
+- PHP Hints
+- JavaScript hints
+- TypeScript Hints
+- GitGutter
+- Clipboard (If you mount as suggested)
 
-- Have a consistent version of Neovim and SpaceVim as long as the machine supports Docker.
-- Try SpaceVim without modifying your current Vim/Neovim configuration.
-- Try the latest Neovim with SpaceVim.
-- Try SpaceVim with a newer version of Python.
-- Debug SpaceVim configurations. e.g. when posting a bug report if you can reproduce it in this container then there's a higher chance that it is a true bug and not just an issue with your machine.
 
-### FAQ
+## Usage
 
-Isn't Docker stateless? Won't I have to reinstall all plugins each time I launch the container?
+```
+alias vbox='docker run -ti -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -e TMPDIR="/tmp/" -e TERM=xterm -e GIT_USERNAME="Varun Batra" -e GIT_EMAIL="codevarun@gmail.com"  --rm -v /etc/timezone:/etc/timezone:ro -v $HOME/tmp/:/tmp/ -v ~/.ssh:/home/spacevim/.ssh -v $(pwd):/home/spacevim/src varunbatrait/spacebox'
+```
 
-- During the build we call `dein#install()` so all plugins are installed and frozen. Your custom configurations can be added as an additional build step using the Docker `COPY` command.
+## Note for GoLang
 
-### Build
-
-You can build using the supplied `Makefile`:
-
-    make build
-
-or call the command manually using:
-
-    docker build -t nvim -f Dockerfile.nvim-python3 .
-
-### Run
-
-You can run the container using:
-
-    docker run -it nvim
-
-but that isn't terribly useful since changes made inside the container won't be visible outside. More useful is mounting the current working directory inside the container:
-
-    docker run -it -v $(pwd):/home/spacevim/src nvim
-
-Even better is an alias `dnvim` which will do this automatically:
-
-    alias dnvim='docker run -it -v $(pwd):/home/spacevim/src nvim'
+Please make sure that you are running vbox in $GOPATH 
