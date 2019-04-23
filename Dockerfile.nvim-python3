@@ -70,7 +70,7 @@ RUN sudo npm cache clean -f
 RUN chown $USER:spacevim -R /home/spacevim/
 RUN sudo chown spacevim:spacevim -R /usr/local/lib
 RUN sudo npm i -g npm@latest
-RUN sudo npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier
+RUN sudo npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier vscode-html
 RUN sudo npm cache clean --force
 # Install Go
 RUN sudo apt-get install -y golang
