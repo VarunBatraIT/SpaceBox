@@ -159,6 +159,10 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/ins
 RUN nvim --headless +'call dein#install()' +qall
 ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
 RUN mkdir -p $HOME/.SpaceVim.d/autoload/
+
+RUN pip install --user pyaml
+RUN sudo apt-get install -y tidy
+
 COPY myspacevim_before.vim $HOME/.SpaceVim.d/autoload/
 COPY myspacevim_after.vim $HOME/.SpaceVim.d/autoload/
 
