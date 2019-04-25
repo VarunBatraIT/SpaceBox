@@ -10,12 +10,6 @@ Tested and working:
 - Clipboard (If you mount as suggested)
 
 
-## Usage
+## Usage and Information
 
-```
-alias vbox='docker run -ti -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -e TMPDIR="/tmp/" -e TERM=xterm -e GIT_USERNAME="Varun Batra" -e GIT_EMAIL="codevarun@gmail.com"  --rm -v /etc/timezone:/etc/timezone:ro -v $HOME/tmp/:/tmp/ -v ~/.ssh:/home/spacevim/.ssh -v $(pwd):/home/spacevim/src varunbatrait/spacebox'
-```
-
-## Note for GoLang
-
-Please make sure that you are running vbox in $GOPATH 
+Please read [SpaceBox – Docker Development Box on SpaceVim](https://webapplicationconsultant.com/docker/spacebox-docker-development-box-on-spacevim/)
