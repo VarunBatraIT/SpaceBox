@@ -23,7 +23,7 @@ RUN echo "deb $DEBIAN_URL testing main contrib non-free" >> /etc/apt/sources.lis
   && apt-get clean all
 
 RUN cd /usr/src                                                 \
-  && git clone https://github.com/neovim/neovim.git             \
+  && git clone --branch v0.3.4 https://github.com/neovim/neovim.git             \
   && cd neovim                                                  \
   && make CMAKE_BUILD_TYPE=RelWithDebInfo                       \
           CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
