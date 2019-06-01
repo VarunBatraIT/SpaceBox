@@ -96,6 +96,8 @@ RUN sudo npm install -g neovim
 
 COPY init.toml $HOME/.SpaceVim.d/init.toml
 
+RUN git clone https://github.com/SpaceVim/SpaceVim.git $HOME/.SpaceVim && cd $HOME/.SpaceVim && git checkout tags/v1.1.0
+
 RUN curl -sLf https://spacevim.org/install.sh | bash
 
 RUN sudo apt-get install -y cscope
