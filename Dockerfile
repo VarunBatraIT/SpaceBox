@@ -164,7 +164,7 @@ ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
 RUN mkdir -p $HOME/.SpaceVim.d/autoload/
 
 RUN pip install --user pyaml
-RUN sudo apt-get install -y tidy
+RUN sudo apt-get install -y tidy && sudo apt-get install --reinstall wamerican wbritish
 
 COPY myspacevim_before.vim $HOME/.SpaceVim.d/autoload/
 COPY myspacevim_after.vim $HOME/.SpaceVim.d/autoload/
