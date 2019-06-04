@@ -1,8 +1,8 @@
 #=============================================================================
-# init.toml --- Docker config temp file
-# Copyright (c) 2016-2017 Wang Shidong & Contributors
-# Author: Wang Shidong < wsdjeg at 163.com >
-# URL: https://spacevim.org
+# init.toml --- Docker config for SpaceBox
+# Copyright (c) 2018-2019 Varun Batra
+# Author: Varun Batra <codevarun@gmail.com>
+# URL: https://webapplicationconsultant.com
 #=============================================================================
 
 
@@ -41,6 +41,18 @@
 # }}}
 
 ## -- SpaceVim layer list start
+[[layers]]
+  name = "exprfold"
+
+[[layers]]
+  name = "unite"
+
+[[layers]]
+  name = "indentmove"
+
+[[layers]]
+  name = "incsearch"
+
 [[layers]]
   name = "VersionControl"
 
@@ -106,6 +118,12 @@
 
 [[layers]]
   name = "japanese"
+
+[[layers]]
+  name = "lang#graphql"
+
+[[layers]]
+  name = "lang#json"
 
 [[layers]]
   name = "lang#WebAssembly"

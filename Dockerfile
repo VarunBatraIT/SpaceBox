@@ -94,8 +94,6 @@ RUN sudo apt-get install -y xclip latexmk xsel
 
 RUN sudo npm install -g neovim
 
-COPY init.toml $HOME/.SpaceVim.d/init.toml
-
 RUN git clone https://github.com/SpaceVim/SpaceVim.git $HOME/.SpaceVim && cd $HOME/.SpaceVim && git checkout tags/v1.1.0
 
 RUN curl -sLf https://spacevim.org/install.sh | bash
@@ -159,12 +157,19 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
 
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install && sudo cp ~/.fzf/bin/fzf /usr/local/bin/
 
-RUN nvim --headless +'call dein#install()' +qall
-ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
-RUN mkdir -p $HOME/.SpaceVim.d/autoload/
-
 RUN pip install --user pyaml
 RUN sudo apt-get install -y tidy && sudo apt-get install --reinstall -y wamerican wbritish
+
+RUN mkdir -p $HOME/.SpaceVim.d/autoload/
+
+COPY init.toml $HOME/.SpaceVim.d/init.toml
+
+RUN sudo chown -R spacevim:spacevim ~/.SpaceVim.d/
+
+
+RUN nvim --headless +'call dein#install()' +qall
+
+ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
 
 COPY myspacevim_before.vim $HOME/.SpaceVim.d/autoload/
 COPY myspacevim_after.vim $HOME/.SpaceVim.d/autoload/
