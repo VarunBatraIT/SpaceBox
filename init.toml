@@ -16,7 +16,6 @@
     bootstrap_before = "myspacevim_before#before"
     bootstrap_before = "myspacevim_after#after"
     enable_vimfiler_gitstatus = true
-    filemanager = "defx"
 
 # }}}
 
