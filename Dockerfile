@@ -166,10 +166,17 @@ COPY init.toml $HOME/.SpaceVim.d/init.toml
 
 RUN sudo chown -R spacevim:spacevim ~/.SpaceVim.d/
 
+RUN sudo apt-get install php-pear -y
 
 RUN nvim --headless +'call dein#install()' +qall
 
 ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
+
+RUN sudo pear channel-update pear.php.net
+RUN sudo pear install PHP_Beautifier-beta
+RUN composer global require squizlabs/php_codesniffer
+
+ENV PATH "$HOME/.composer/vendor/bin:${PATH}"
 
 COPY myspacevim_before.vim $HOME/.SpaceVim.d/autoload/
 COPY myspacevim_after.vim $HOME/.SpaceVim.d/autoload/
