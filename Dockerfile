@@ -64,6 +64,7 @@ RUN sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tok
     && chmod +x composer.phar \
     && sudo mv composer.phar /usr/local/bin/composer
 # Install Node
+RUN sudo apt-get install -y zlib1g
 RUN sudo apt-get install -y nodejs
 RUN sudo apt-get install -y npm
 # Install Node Related
@@ -83,7 +84,7 @@ RUN pip install --user python-language-server
 WORKDIR $HOME
 ENV PATH "$HOME/.local/bin:${PATH}"
 
-RUN mkdir -p $HOME/.config $HOME/.SpaceVim.d
+RUN mkdir -p $HOME/.config $HOME/.SpaceVim.d $HOME/notebook
 
 RUN pip install --user neovim pipenv
 
@@ -168,6 +169,7 @@ RUN sudo chown -R spacevim:spacevim ~/.SpaceVim.d/
 
 RUN sudo apt-get install php-pear -y
 
+RUN echo "Installing"
 RUN nvim --headless +'call dein#install()' +qall
 
 ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
