@@ -47,14 +47,15 @@ RUN sudo apt-get install -y nodejs npm \
   && sudo npm install -g neovim \
   && sudo npm cache clean --force
 # Install Go
+RUN sudo apt-get install -y golang
 ENV GOROOT="/usr/lib/go"
 ENV GOBIN="$GOROOT/bin"
 ENV GOPATH="$UHOME/src"
 ENV PATH="$PATH:$GOBIN:$GOROOT:$GOPATH/bin"
-RUN mkdir -p $GOBIN && sudo chmod 770 $GOBIN \
-    # Go requirements
-    && sudo apt-get install -y golang \
-    && go get -v -u -d github.com/klauspost/asmfmt/cmd/asmfmt \
+RUN sudo mkdir -p $GOBIN && sudo chmod 770 $GOBIN \
+    && sudo mkdir -p $GOROOT && sudo chmod 770 $GOROOT
+   # Go requirements
+RUN go get -v -u -d github.com/klauspost/asmfmt/cmd/asmfmt \
     && go build -o $GOBIN/asmfmt github.com/klauspost/asmfmt/cmd/asmfmt \
     && go get -v -u -d github.com/go-delve/delve/cmd/dlv \
     && go build -o $GOBIN/dlv github.com/go-delve/delve/cmd/dlv \
