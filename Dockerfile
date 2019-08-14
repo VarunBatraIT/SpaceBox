@@ -1,5 +1,4 @@
-FROM python:3.6.5-stretch
-#FROM python:3.7.4-buster
+FROM python:3.7.4-buster
 
 ENV DEBIAN_URL "http://ftp.us.debian.org/debian"
 ENV UHOME /home/spacevim
