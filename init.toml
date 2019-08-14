@@ -16,6 +16,7 @@
     bootstrap_before = "myspacevim_before#before"
     bootstrap_before = "myspacevim_after#after"
     enable_vimfiler_gitstatus = true
+    statusline_inactive_separator = "arrow"
 
 # }}}
 
@@ -265,6 +266,9 @@
 
 [[layers]]
   name = "tmux"
+  tmuxline_separators = "arrow"
+  statusline_inactive_separator = "bar"
+  tmux_navigator_modifier = "ctrl"
 
 [[layers]]
   name = "tools#dash"

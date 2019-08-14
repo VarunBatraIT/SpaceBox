@@ -1,4 +1,5 @@
 FROM python:3.6.5-stretch
+#FROM python:3.7.4-buster
 
 ENV DEBIAN_URL "http://ftp.us.debian.org/debian"
 ENV UHOME /home/spacevim
@@ -8,10 +9,12 @@ RUN echo "deb $DEBIAN_URL testing main contrib non-free" >> /etc/apt/sources.lis
   && apt-get update --fix-missing                               \
   && apt-get install -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
                         lua5.3 ninja-build pkg-config unzip xclip xfonts-utils exuberant-ctags \
+                        wamerican wbritish tidy xclip latexmk xsel cscope \
                         sudo zlib1g \
                         && apt-get clean all
 
-RUN cd /usr/src && git clone --branch v0.3.8 https://github.com/neovim/neovim.git && cd neovim \
+#RUN cd /usr/src && git clone --branch v0.3.8 https://github.com/neovim/neovim.git && cd neovim \
+RUN cd /usr/src && git clone https://github.com/neovim/neovim.git && cd neovim \
     && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
     && make install && rm -r /usr/src/neovim
 
@@ -30,32 +33,16 @@ USER spacevim
 
 WORKDIR /tmp
 
-RUN sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack \
-    && php -r "copy('https://getcomposer.org/download/1.8.4/composer.phar', 'composer.phar');" \
-    && php -r "if (hash_file('sha256', 'composer.phar') === '1722826c8fbeaf2d6cdd31c9c9af38694d6383a0f2bf476fe6bbd30939de058a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer.phar'); } echo PHP_EOL;" \
-    && chmod +x composer.phar \
-    && sudo mv composer.phar /usr/local/bin/composer
-# Install Node
-RUN sudo apt-get install -y nodejs npm \
-# Install Node Related
-  && sudo npm cache clean -f \
-  && chown $UNAME:$UNAME -R $UHOME \
-  && sudo chown $UNAME:$UNAME -R /usr/local/lib \
-  && sudo npm i -g npm@latest \
-  && sudo npm install --unsafe-perm -g sqlite3@4.0.6 \
-  && sudo npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier vscode-html-languageserver-bin \
-  && sudo npm install -g neovim \
-  && sudo npm cache clean --force
 # Install Go
-RUN sudo apt-get install -y golang
 ENV GOROOT="/usr/lib/go"
 ENV GOBIN="$GOROOT/bin"
 ENV GOPATH="$UHOME/src"
 ENV PATH="$PATH:$GOBIN:$GOROOT:$GOPATH/bin"
+RUN sudo apt-get install -y golang
 RUN sudo mkdir -p $GOBIN && sudo chmod 770 $GOBIN \
-    && sudo mkdir -p $GOROOT && sudo chmod 770 $GOROOT
+    && sudo mkdir -p $GOROOT && sudo chmod 770 $GOROOT \
    # Go requirements
-RUN go get -v -u -d github.com/klauspost/asmfmt/cmd/asmfmt \
+    && go get -v -u -d github.com/klauspost/asmfmt/cmd/asmfmt \
     && go build -o $GOBIN/asmfmt github.com/klauspost/asmfmt/cmd/asmfmt \
     && go get -v -u -d github.com/go-delve/delve/cmd/dlv \
     && go build -o $GOBIN/dlv github.com/go-delve/delve/cmd/dlv \
@@ -97,8 +84,30 @@ RUN go get -v -u -d github.com/klauspost/asmfmt/cmd/asmfmt \
     && go build -o $GOBIN/go-langserver github.com/sourcegraph/go-langserver \
     && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.16.0
 
+
+RUN sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
+    && php -r "copy('https://getcomposer.org/download/1.8.4/composer.phar', 'composer.phar');" \
+    && php -r "if (hash_file('sha256', 'composer.phar') === '1722826c8fbeaf2d6cdd31c9c9af38694d6383a0f2bf476fe6bbd30939de058a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer.phar'); } echo PHP_EOL;" \
+    && chmod +x composer.phar \
+    && sudo mv composer.phar /usr/local/bin/composer \
+    && composer global require squizlabs/php_codesniffer \
+    && sudo pear channel-update pear.php.net \
+    && sudo pear install --alldeps PHP_Beautifier-beta
+# Install Node
+ENV PATH=~/.npm-global/bin:$PATH
+RUN sudo apt-get install -y nodejs npm \
+# Install Node Related
+  && sudo npm cache clean -f \
+  && chown $UNAME:$UNAME -R $UHOME \
+  && sudo chown $UNAME:$UNAME -R /usr/local/lib \
+  && sudo npm i -g npm@latest \
+  && mkdir ~/.npm-global &&  npm config set prefix '~/.npm-global' \
+  && npm install --unsafe-perm -g sqlite3@4.0.6 \
+  && npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier vscode-html-languageserver-bin \
+  && npm install -g neovim \
+  && sudo npm cache clean --force
 # PIP more
-RUN pip install --user python-language-server neovim pipenv pyaml
+RUN pip install --user python-language-server neovim pipenv pyaml ujson
 
 
 WORKDIR $UHOME
@@ -106,36 +115,20 @@ ENV PATH "$UHOME/.local/bin:${PATH}"
 
 RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook
 
-# Install clipboard support
-RUN sudo apt-get install -y xclip latexmk xsel cscope
-
-
-RUN git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim && git checkout tags/v1.1.0
-
-RUN curl -sLf https://spacevim.org/install.sh | bash
-
 RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.3.5.linux.tar.gz && tar -xvzf gtm.v1.3.5.linux.tar.gz && sudo mv gtm /usr/local/bin && rm gtm.v1.3.5.linux.tar.gz
-
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install && sudo cp ~/.fzf/bin/fzf /usr/local/bin/
 
-RUN sudo apt-get install -y tidy && sudo apt-get install --reinstall -y wamerican wbritish
 
-RUN mkdir -p $UHOME/.SpaceVim.d/autoload/
+#RUN git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim && git checkout tags/v1.1.0
+RUN curl -sLf https://spacevim.org/install.sh | bash
 
+RUN mkdir -p $UHOME/.SpaceVim.d/autoload/ &&  mkdir -p $UHOME/.cache/SpaceVim/cscope/
 COPY init.toml $UHOME/.SpaceVim.d/init.toml
-
 RUN sudo chown -R spacevim:spacevim ~/.SpaceVim.d/
-
-RUN sudo apt-get install php-pear -y
-
 RUN echo "Installing"
 RUN nvim --headless +'call dein#install()' +qall
 
 ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
-
-RUN sudo pear channel-update pear.php.net
-RUN sudo pear install PHP_Beautifier-beta
-RUN composer global require squizlabs/php_codesniffer
 
 ENV PATH "$UHOME/.composer/vendor/bin:${PATH}"
 
