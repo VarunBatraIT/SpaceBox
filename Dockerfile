@@ -88,7 +88,6 @@ RUN sudo mkdir -p $GOBIN && sudo chmod 770 $GOBIN \
     && go build -o $GOBIN/go-langserver github.com/sourcegraph/go-langserver \
     && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.16.0
 
-
 RUN sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
     && php -r "copy('https://getcomposer.org/download/1.8.4/composer.phar', 'composer.phar');" \
     && php -r "if (hash_file('sha256', 'composer.phar') === '1722826c8fbeaf2d6cdd31c9c9af38694d6383a0f2bf476fe6bbd30939de058a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer.phar'); } echo PHP_EOL;" \
@@ -145,12 +144,13 @@ RUN nvim --headless +'call dein#install()' +qall
 
 ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
 
-ENV PATH "$UHOME/.composer/vendor/bin:${PATH}"
+ENV PATH="$UHOME/.composer/vendor/bin:${PATH}"
 
 COPY myspacevim.vim $UHOME/.SpaceVim.d/autoload/
 
 COPY run $UHOME/
 RUN touch ~/.viminfo
 RUN chmod o+w ~/.viminfo
+RUN sudo chown $UNAME:$UNAME -R /usr/lib/
 ENTRYPOINT ["sh", "/home/spacevim/run"]
 
