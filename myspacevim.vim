@@ -2,6 +2,7 @@ function! myspacevim#before() abort
   set updatetime=200
   set clipboard=unnamedplus
   let g:dein#install_max_processes=1
+  let g:deoplete#enable_at_startup = 1
 endfunction
 
 function! myspacevim#after() abort

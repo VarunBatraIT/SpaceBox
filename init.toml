@@ -26,11 +26,13 @@
     name = "SpaceVim/denite.nvim"
     merged = false
     loadconf = true
+    rev = "f16b581"
 # }}}
 
 # custom plugins {{{
 [[custom_plugins]]
   name = 'Shougo/deoplete.nvim'
+  loadconf = true
   merged = 0
 # }}}
 
