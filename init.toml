@@ -17,33 +17,8 @@
     bootstrap_after = "myspacevim#after"
     enable_vimfiler_gitstatus = true
     statusline_inactive_separator = "arrow"
-    disabled_plugins = ["denite.nvim","deoplete.nvim","nvim-typescript"]
 
 # }}}
-
-# custom plugins {{{
-[[custom_plugins]]
-    name = "SpaceVim/denite.nvim"
-    merged = false
-    loadconf = true
-    rev = "f16b581"
-# }}}
-
-# custom plugins {{{
-[[custom_plugins]]
-  name = 'Shougo/deoplete.nvim'
-  loadconf = true
-  merged = 0
-# }}}
-
-# custom plugins {{{
-[[custom_plugins]]
-  name = 'mhartington/nvim-typescript'
-  build = './install.sh'
-  rev = '678336f'
-  merged = 0
-# }}}
-
 
 # custom plugins {{{
 #[[custom_plugins]]

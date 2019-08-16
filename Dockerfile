@@ -132,7 +132,8 @@ RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook
 #RUN echo "Version now is 2fd4da8"
 #RUN git clone https://github.com/VarunBatraIT/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim
 RUN git clone --branch 2.0 https://github.com/Shougo/dein.vim.git $HOME/.cache/vimfiles/repos/github.com/Shougo/dein.vim
-RUN git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim && git checkout tags/v1.2.0
+RUN git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim
+#&& git checkout tags/v1.2.0
 RUN curl -sLf https://spacevim.org/install.sh | bash
 
 RUN mkdir -p $UHOME/.SpaceVim.d/autoload/ &&  mkdir -p $UHOME/.cache/SpaceVim/cscope/
