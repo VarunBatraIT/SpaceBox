@@ -3,6 +3,11 @@ function! myspacevim#before() abort
   set clipboard=unnamedplus
   let g:dein#install_max_processes=1
   let g:deoplete#enable_at_startup = 1
+  let g:vimfiler_tree_leaf_icon = ' '
+	let g:vimfiler_tree_opened_icon = '▾'
+	let g:vimfiler_tree_closed_icon = '▸'
+	let g:vimfiler_file_icon = '-'
+	let g:vimfiler_marked_file_icon = '*'
 endfunction
 
 function! myspacevim#after() abort

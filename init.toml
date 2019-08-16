@@ -17,6 +17,7 @@
     bootstrap_after = "myspacevim#after"
     enable_vimfiler_gitstatus = true
     statusline_inactive_separator = "arrow"
+    guifont = "SauceCodePro Nerd Font Mono:h11"
 
 # }}}
 
@@ -24,12 +25,6 @@
 #[[custom_plugins]]
 #  name = 'HerringtonDarkholme/yats.vim'
 #  merged = 0
-# }}}
-
-# custom plugins {{{
-[[custom_plugins]]
-  name = 'kristijanhusak/defx-icons'
-  merged = 0
 # }}}
 
 # custom plugins {{{
