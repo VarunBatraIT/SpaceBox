@@ -13,13 +13,41 @@
     plugin_manager_max_processes = 2
     plugin_manager_processes = 2
     vim_help_language = 'en'
-    bootstrap_before = "myspacevim_before#before"
-    bootstrap_before = "myspacevim_after#after"
+    bootstrap_before = "myspacevim#before"
+    bootstrap_after = "myspacevim#after"
     enable_vimfiler_gitstatus = true
     statusline_inactive_separator = "arrow"
+    disabled_plugins = ["denite.nvim","deoplete.nvim","nvim-typescript"]
 
 # }}}
 
+# custom plugins {{{
+[[custom_plugins]]
+    name = "SpaceVim/denite.nvim"
+    merged = false
+    loadconf = true
+# }}}
+
+# custom plugins {{{
+[[custom_plugins]]
+  name = 'Shougo/deoplete.nvim'
+  merged = 0
+# }}}
+
+# custom plugins {{{
+[[custom_plugins]]
+  name = 'mhartington/nvim-typescript'
+  build = './install.sh'
+  rev = '678336f'
+  merged = 0
+# }}}
+
+
+# custom plugins {{{
+#[[custom_plugins]]
+#  name = 'HerringtonDarkholme/yats.vim'
+#  merged = 0
+# }}}
 
 # custom plugins {{{
 [[custom_plugins]]
@@ -267,7 +295,7 @@
 [[layers]]
   name = "tmux"
   tmuxline_separators = "arrow"
-  statusline_inactive_separator = "bar"
+  #statusline_inactive_separator = "bar"
   tmux_navigator_modifier = "ctrl"
 
 [[layers]]
