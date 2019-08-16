@@ -28,6 +28,11 @@
 
 # custom plugins {{{
 [[custom_plugins]]
+  name = 'ryanoasis/vim-devicons'
+  merged = 0
+# }}}
+# custom plugins {{{
+[[custom_plugins]]
   name = 'chr4/nginx.vim'
   merged = 0
 # }}}

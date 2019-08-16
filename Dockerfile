@@ -1,5 +1,5 @@
-FROM ubuntu:18.04
-#FROM python:3.7.4-buster
+FROM python:3.7.4-buster
+#FROM ubuntu:18.04
 
 ENV DEBIAN_URL "http://ftp.us.debian.org/debian"
 ENV UHOME /home/spacevim
@@ -61,32 +61,32 @@ RUN sudo mkdir -p $GOBIN && sudo chmod 770 $GOBIN \
     && go get -v -u -d golang.org/x/tools/cmd/goimports \
     && go build -o $GOBIN/goimports golang.org/x/tools/cmd/goimports \
     && go get -v -u -d golang.org/x/lint/golint \
-    && go build -o $GOBIN/golint golang.org/x/lint/golint
-#RUN go get -v -u -d golang.org/x/tools/cmd/gopls \
-  #    && go build -o $GOBIN/gopls golang.org/x/tools/cmd/gopls
-RUN go get -v -u -d github.com/alecthomas/gometalinter \
-    && go build -o $GOBIN/gometalinter github.com/alecthomas/gometalinter
-RUN go get -v -u -d github.com/fatih/gomodifytags \
+    && go build -o $GOBIN/golint golang.org/x/lint/golint \
+    && go get -v -u -d golang.org/x/tools/cmd/gopls \
+    && go build -o $GOBIN/gopls golang.org/x/tools/cmd/gopls \
+    && go get -v -u -d github.com/alecthomas/gometalinter \
+    && go build -o $GOBIN/gometalinter github.com/alecthomas/gometalinter \
+    && go get -v -u -d github.com/fatih/gomodifytags \
     && go build -o $GOBIN/gomodifytags github.com/fatih/gomodifytags \
     && go get -v -u -d golang.org/x/tools/cmd/gorename \
     && go build -o $GOBIN/gorename golang.org/x/tools/cmd/gorename \
     && go get -v -u -d github.com/jstemmer/gotags \
     && go build -o $GOBIN/gotags github.com/jstemmer/gotags \
     && go get -v -u -d golang.org/x/tools/cmd/guru \
-    && go build -o $GOBIN/guru golang.org/x/tools/cmd/guru
-RUN go get -v -u -d github.com/josharian/impl \
+    && go build -o $GOBIN/guru golang.org/x/tools/cmd/guru \
+    && go get -v -u -d github.com/josharian/impl \
     && go build -o $GOBIN/impl github.com/josharian/impl \
     && go get -v -u -d honnef.co/go/tools/cmd/keyify \
-    && go build -o $GOBIN/keyify honnef.co/go/tools/cmd/keyify
-RUN go get -v -u -d github.com/fatih/motion \
+    && go build -o $GOBIN/keyify honnef.co/go/tools/cmd/keyify \
+    && go get -v -u -d github.com/fatih/motion \
     && go build -o $GOBIN/motion github.com/fatih/motion \
     && go get -v -u -d github.com/koron/iferr \
     && go build -o $GOBIN/iferr github.com/koron/iferr \
     && go get -v -u -d github.com/stamblerre/gocode \
     && go build -o $GOBIN/gocode github.com/stamblerre/gocode \
     && go get -v -u -d github.com/sourcegraph/go-langserver \
-    && go build -o $GOBIN/go-langserver github.com/sourcegraph/go-langserver
-RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.16.0
+    && go build -o $GOBIN/go-langserver github.com/sourcegraph/go-langserver \
+    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.16.0
 
 
 RUN sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
@@ -101,8 +101,8 @@ RUN sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tok
 # Install Node
 ENV PATH=~/.npm-global/bin:$PATH
 
-RUN sudo chmod 777 '/home/spacevim/.pearrc'
-RUN sudo chown $UNAME:$UNAME '/home/spacevim/.pearrc'
+#RUN sudo chmod 777 '/home/spacevim/.pearrc'
+#RUN sudo chown $UNAME:$UNAME '/home/spacevim/.pearrc'
 RUN sudo apt-get install -y nodejs npm \
 # Install Node Related
   && sudo npm cache clean -f \
@@ -128,6 +128,7 @@ ENV PATH "$UHOME/.local/bin:${PATH}"
 RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook
 
 
+RUN git clone --branch v2.0.0 --depth 1 https://github.com/ryanoasis/nerd-fonts.git && cd nerd-fonts && ./install.sh && cd .. && rm nerd-fonts -rf
 
 #RUN echo "Version now is 2fd4da8"
 #RUN git clone https://github.com/VarunBatraIT/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim
