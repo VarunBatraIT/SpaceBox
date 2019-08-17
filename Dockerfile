@@ -4,20 +4,25 @@ FROM python:3.7.4-buster
 ENV DEBIAN_URL "http://ftp.us.debian.org/debian"
 ENV UHOME /home/spacevim
 ENV UNAME="spacevim"
+ENV DEBIAN_FRONTEND=noninteractive
+ENV GOROOT="/usr/lib/go"
+ENV GOBIN="$GOROOT/bin"
+ENV GOPATH="$UHOME/src"
+ENV PATH="$PATH:$GOBIN:$GOROOT:$GOPATH/bin"
+ENV TZ=Europe/Minsk
+ENV PATH=~/.npm-global/bin:$PATH
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN  apt-get update --fix-missing                               \
-  && apt-get install -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
-                        lua5.3 ninja-build pkg-config unzip xclip xfonts-utils exuberant-ctags \
-                        wamerican wbritish tidy xclip latexmk xsel cscope \
-                        sudo zlib1g wget curl \
-                        && apt-get clean all
-
-RUN cd /usr/src && git clone --branch v0.3.6 https://github.com/neovim/neovim.git && cd neovim \
+   && apt-get install --no-install-recommends -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
+    lua5.3 ninja-build pkg-config unzip xclip xfonts-utils exuberant-ctags \
+    wamerican wbritish tidy xclip latexmk xsel cscope \
+    sudo zlib1g wget curl \
+    && apt-get clean all \ 
+    cd /usr/src && git clone --branch v0.3.6 https://github.com/neovim/neovim.git && cd neovim \
     && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
-    && make install && rm -r /usr/src/neovim
-
-
-RUN groupdel users  && groupadd -r -g 1000  spacevim \
+    && make install && rm -r /usr/src/neovim \
+    && groupdel users  && groupadd -r -g 1000  spacevim \
     && useradd --create-home --home-dir $UHOME -u 1000 -r -g spacevim spacevim \
     && usermod -aG sudo spacevim \
     && usermod -aG root spacevim \
@@ -25,26 +30,17 @@ RUN groupdel users  && groupadd -r -g 1000  spacevim \
     && touch "/etc/sudoers.d/${UNAME}" \
     && echo "${UNAME} ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/${UNAME}" \
     && chmod 0440 "/etc/sudoers.d/${UNAME}"
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Europe/Minsk
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install PHP
 USER spacevim
 
 WORKDIR /tmp
 
-RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.3.5.linux.tar.gz && tar -xvzf gtm.v1.3.5.linux.tar.gz && sudo mv gtm /usr/local/bin && rm gtm.v1.3.5.linux.tar.gz
-RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install && sudo cp ~/.fzf/bin/fzf /usr/local/bin/
-
-# Install Go
-ENV GOROOT="/usr/lib/go"
-ENV GOBIN="$GOROOT/bin"
-ENV GOPATH="$UHOME/src"
-ENV PATH="$PATH:$GOBIN:$GOROOT:$GOPATH/bin"
-RUN sudo apt-get install -y golang
-RUN sudo mkdir -p $GOBIN && sudo chmod 770 $GOBIN \
-    && sudo mkdir -p $GOROOT && sudo chmod 770 $GOROOT \
+RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.3.5.linux.tar.gz && tar -xvzf gtm.v1.3.5.linux.tar.gz && sudo mv gtm /usr/local/bin && rm gtm.v1.3.5.linux.tar.gz \
+      && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install && sudo cp ~/.fzf/bin/fzf /usr/local/bin/ \
+      && sudo apt-get install -y golang \
+      && sudo mkdir -p $GOBIN && sudo chmod 770 $GOBIN \
+      && sudo mkdir -p $GOROOT && sudo chmod 770 $GOROOT \
    # Go requirements
     && go get -v -u -d github.com/klauspost/asmfmt/cmd/asmfmt \
     && go build -o $GOBIN/asmfmt github.com/klauspost/asmfmt/cmd/asmfmt \
@@ -86,9 +82,9 @@ RUN sudo mkdir -p $GOBIN && sudo chmod 770 $GOBIN \
     && go build -o $GOBIN/gocode github.com/stamblerre/gocode \
     && go get -v -u -d github.com/sourcegraph/go-langserver \
     && go build -o $GOBIN/go-langserver github.com/sourcegraph/go-langserver \
-    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.16.0
-
-RUN sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
+    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.16.0 \
+    # PHP
+    && sudo apt-get install -y --no-install-recommends  php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
     && php -r "copy('https://getcomposer.org/download/1.8.4/composer.phar', 'composer.phar');" \
     && php -r "if (hash_file('sha256', 'composer.phar') === '1722826c8fbeaf2d6cdd31c9c9af38694d6383a0f2bf476fe6bbd30939de058a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer.phar'); } echo PHP_EOL;" \
     && chmod +x composer.phar \
@@ -96,62 +92,48 @@ RUN sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tok
     && composer global require squizlabs/php_codesniffer \
     && composer global require phpmd/phpmd \
     && sudo pear channel-update pear.php.net \
-    && sudo pear install --alldeps PHP_Beautifier-beta
-
+    && sudo pear install --alldeps PHP_Beautifier-beta \
 # Install Node
-ENV PATH=~/.npm-global/bin:$PATH
-
-#RUN sudo chmod 777 '/home/spacevim/.pearrc'
-#RUN sudo chown $UNAME:$UNAME '/home/spacevim/.pearrc'
-RUN sudo apt-get install -y nodejs npm \
+    && sudo apt-get install --no-install-recommends  -y nodejs npm \
 # Install Node Related
-  && sudo npm cache clean -f \
-  && chown $UNAME:$UNAME -R $UHOME \
-  && sudo chown $UNAME:$UNAME -R /usr/local/lib \
-  && sudo npm i -g npm@latest \
-  && sudo chown $UNAME:$UNAME -R $UHOME \
-  && mkdir ~/.npm-global &&  npm config set prefix '~/.npm-global' \
-  && npm install --unsafe-perm -g sqlite3@4.0.6 \
-  && npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier vscode-html-languageserver-bin \
-  && npm install -g neovim \
-  && sudo npm cache clean --force
+    && sudo npm cache clean -f \
+    && chown $UNAME:$UNAME -R $UHOME \
+    && sudo chown $UNAME:$UNAME -R /usr/local/lib \
+    && sudo npm i -g npm@latest \
+    && sudo chown $UNAME:$UNAME -R $UHOME \
+    && mkdir ~/.npm-global &&  npm config set prefix '~/.npm-global' \
+    && npm install --unsafe-perm -g sqlite3@4.0.6 \
+    && npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier vscode-html-languageserver-bin \
+    && npm install -g neovim \
+    && sudo npm cache clean --force \
 # PIP more
 #RUN pip install --user python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
-RUN sudo apt install python3-pip python-pip -y
-RUN sudo pip install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
-RUN sudo pip3 install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
+    && sudo apt-get install --no-install-recommends  python3-pip python-pip -y \
+    && sudo pip  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client \
+    && sudo pip3  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
 
-
-WORKDIR $UHOME
 ENV PATH "$UHOME/.local/bin:${PATH}"
-
-RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook
-
-
-RUN git clone --branch v2.0.0 --depth 1 https://github.com/ryanoasis/nerd-fonts.git && cd nerd-fonts && ./install.sh && cd .. && rm nerd-fonts -rf
-
-#RUN echo "Version now is 2fd4da8"
-#RUN git clone https://github.com/VarunBatraIT/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim
-RUN git clone --branch 2.0 https://github.com/Shougo/dein.vim.git $HOME/.cache/vimfiles/repos/github.com/Shougo/dein.vim
-RUN git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim
+RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook \
+    && git clone --branch 2.0 https://github.com/Shougo/dein.vim.git $HOME/.cache/vimfiles/repos/github.com/Shougo/dein.vim \
+    && git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim \
 #&& git checkout tags/v1.2.0
-RUN curl -sLf https://spacevim.org/install.sh | bash
-
-RUN mkdir -p $UHOME/.SpaceVim.d/autoload/ &&  mkdir -p $UHOME/.cache/SpaceVim/cscope/
+    && curl -sLf https://spacevim.org/install.sh | bash \
+    && mkdir -p $UHOME/.SpaceVim.d/autoload/ &&mkdir -p $UHOME/.cache/SpaceVim/cscope/
 COPY init.toml $UHOME/.SpaceVim.d/init.toml
-RUN sudo chown -R spacevim:spacevim ~/.SpaceVim.d/
-RUN echo "Installing"
-RUN nvim --headless +'call dein#install()' +qall
+RUN sudo chown -R spacevim:spacevim ~/.SpaceVim.d/ \
+      && nvim --headless +'call dein#install()' +qall
 
 ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
 
 ENV PATH="$UHOME/.composer/vendor/bin:${PATH}"
 
 COPY myspacevim.vim $UHOME/.SpaceVim.d/autoload/
-
 COPY run $UHOME/
 RUN touch ~/.viminfo
 RUN chmod o+w ~/.viminfo
-RUN sudo chown $UNAME:$UNAME -R /usr/lib/
+RUN sudo chown $UNAME:$UNAME -R /usr/lib/go/bin/ \
+      && cd ~/ && find . \( -name ".git" -o -name ".gitignore" -o -name ".gitmodules" -o -name ".gitattributes" \) -exec rm -rf -- {} + \
+      sudo apt-get clean all -y && sudo rm -rf /tmp/* \
+      &&  composer clearcache
 ENTRYPOINT ["sh", "/home/spacevim/run"]
 
