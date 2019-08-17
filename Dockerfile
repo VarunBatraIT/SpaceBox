@@ -19,7 +19,7 @@ RUN  apt-get update --fix-missing                               \
     wamerican wbritish tidy xclip latexmk xsel cscope \
     sudo zlib1g wget curl \
     && apt-get clean all \ 
-    cd /usr/src && git clone --branch v0.3.6 https://github.com/neovim/neovim.git && cd neovim \
+    && cd /usr/src && git clone --branch v0.3.6 https://github.com/neovim/neovim.git && cd neovim \
     && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
     && make install && rm -r /usr/src/neovim \
     && groupdel users  && groupadd -r -g 1000  spacevim \
@@ -113,27 +113,29 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
     && sudo pip3  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
 
 ENV PATH "$UHOME/.local/bin:${PATH}"
+ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
+ENV PATH="$UHOME/.composer/vendor/bin:${PATH}"
+COPY init.toml $UHOME/
+
 RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook \
     && git clone --branch 2.0 https://github.com/Shougo/dein.vim.git $HOME/.cache/vimfiles/repos/github.com/Shougo/dein.vim \
     && git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim \
+    && mv $UHOME/init.toml $UHOME/.SpaceVim.d/init.toml \
 #&& git checkout tags/v1.2.0
     && curl -sLf https://spacevim.org/install.sh | bash \
-    && mkdir -p $UHOME/.SpaceVim.d/autoload/ &&mkdir -p $UHOME/.cache/SpaceVim/cscope/
-COPY init.toml $UHOME/.SpaceVim.d/init.toml
-RUN sudo chown -R spacevim:spacevim ~/.SpaceVim.d/ \
-      && nvim --headless +'call dein#install()' +qall
+    && mkdir -p $UHOME/.SpaceVim.d/autoload/ &&mkdir -p $UHOME/.cache/SpaceVim/cscope/ \
+    && sudo chown -R spacevim:spacevim ~/.SpaceVim.d/ \
+    && nvim --headless +'call dein#install()' +qall \
+    # Clean up
+    && sudo chown $UNAME:$UNAME -R /usr/lib/go/bin/ \
+    && cd ~/ && find . \( -name ".git" -o -name ".gitignore" -o -name ".gitmodules" -o -name ".gitattributes" \) -exec rm -rf -- {} + \
+    && sudo apt-get clean all -y && sudo rm -rf /tmp/* \
+    &&  composer clearcache
 
-ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
-
-ENV PATH="$UHOME/.composer/vendor/bin:${PATH}"
 
 COPY myspacevim.vim $UHOME/.SpaceVim.d/autoload/
 COPY run $UHOME/
 RUN touch ~/.viminfo
 RUN chmod o+w ~/.viminfo
-RUN sudo chown $UNAME:$UNAME -R /usr/lib/go/bin/ \
-      && cd ~/ && find . \( -name ".git" -o -name ".gitignore" -o -name ".gitmodules" -o -name ".gitattributes" \) -exec rm -rf -- {} + \
-      sudo apt-get clean all -y && sudo rm -rf /tmp/* \
-      &&  composer clearcache
 ENTRYPOINT ["sh", "/home/spacevim/run"]
 
