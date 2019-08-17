@@ -84,13 +84,15 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
     && go build -o $GOBIN/go-langserver github.com/sourcegraph/go-langserver \
     && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.16.0 \
     # PHP
-    && sudo apt-get install -y --no-install-recommends  php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
+    #&& sudo apt-get install -y --no-install-recommends  php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
+    && sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
     && php -r "copy('https://getcomposer.org/download/1.8.4/composer.phar', 'composer.phar');" \
     && php -r "if (hash_file('sha256', 'composer.phar') === '1722826c8fbeaf2d6cdd31c9c9af38694d6383a0f2bf476fe6bbd30939de058a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer.phar'); } echo PHP_EOL;" \
     && chmod +x composer.phar \
     && sudo mv composer.phar /usr/local/bin/composer \
     && composer global require squizlabs/php_codesniffer \
     && composer global require phpmd/phpmd \
+    && composer global require vimeo/psalm \
     && sudo pear channel-update pear.php.net \
     && sudo pear install --alldeps PHP_Beautifier-beta \
 # Install Node
@@ -123,14 +125,14 @@ RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook \
     && mv $UHOME/init.toml $UHOME/.SpaceVim.d/init.toml \
 #&& git checkout tags/v1.2.0
     && curl -sLf https://spacevim.org/install.sh | bash \
-    && mkdir -p $UHOME/.SpaceVim.d/autoload/ &&mkdir -p $UHOME/.cache/SpaceVim/cscope/ \
+    && mkdir -p $UHOME/.SpaceVim.d/autoload/ && mkdir -p $UHOME/.cache/SpaceVim/cscope/ \
     && sudo chown -R spacevim:spacevim ~/.SpaceVim.d/ \
     && nvim --headless +'call dein#install()' +qall \
     # Clean up
     && sudo chown $UNAME:$UNAME -R /usr/lib/go/bin/ \
     && cd ~/ && find . \( -name ".git" -o -name ".gitignore" -o -name ".gitmodules" -o -name ".gitattributes" \) -exec rm -rf -- {} + \
-    && sudo apt-get clean all -y && sudo rm -rf /tmp/* \
-    &&  composer clearcache
+    && sudo apt-get clean all -y && sudo rm -rf /tmp/*
+    #&&  composer clearcache
 
 
 COPY myspacevim.vim $UHOME/.SpaceVim.d/autoload/

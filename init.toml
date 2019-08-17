@@ -22,9 +22,11 @@
 # }}}
 
 # custom plugins {{{
-#[[custom_plugins]]
-#  name = 'HerringtonDarkholme/yats.vim'
-#  merged = 0
+[[custom_plugins]]
+  name = 'lvht/phpcd.vim'
+  build = 'composer install'
+  merged = 0
+  on_ft = 'php'
 # }}}
 
 # custom plugins {{{
@@ -262,9 +264,6 @@
 
 [[layers]]
   name = "lsp"
-  filetypes = [
-    'php'
-  ]
 
 [[layers]]
   name = "leaderf"
