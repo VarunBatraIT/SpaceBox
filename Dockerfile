@@ -94,6 +94,7 @@ RUN sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tok
     && chmod +x composer.phar \
     && sudo mv composer.phar /usr/local/bin/composer \
     && composer global require squizlabs/php_codesniffer \
+    && composer global require phpmd/phpmd \
     && sudo pear channel-update pear.php.net \
     && sudo pear install --alldeps PHP_Beautifier-beta
 

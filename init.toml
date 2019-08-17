@@ -262,6 +262,9 @@
 
 [[layers]]
   name = "lsp"
+  filetypes = [
+    'php'
+  ]
 
 [[layers]]
   name = "leaderf"
