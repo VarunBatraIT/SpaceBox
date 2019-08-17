@@ -18,6 +18,7 @@
     enable_vimfiler_gitstatus = true
     statusline_inactive_separator = "arrow"
     guifont = "SauceCodePro Nerd Font Mono:h11"
+    disabled_plugins = ["phpcomplete.vim"]
 
 # }}}
 
