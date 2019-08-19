@@ -136,8 +136,8 @@ RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook \
 
 
 COPY myspacevim.vim $UHOME/.SpaceVim.d/autoload/
-COPY "Sauce Code Pro Nerd Font Complete Mono Windows Compatible.ttf" /usr/local/share/fonts/
-COPY "Sauce Code Pro Nerd Font Complete Mono Windows Compatible.ttf" $UNAME/.local/share/fonts/
+COPY ["Sauce Code Pro Nerd Font Complete Mono Windows Compatible.ttf","/usr/local/share/fonts/"]
+COPY ["Sauce Code Pro Nerd Font Complete Mono Windows Compatible.ttf","$UNAME/.local/share/fonts"]
 COPY run $UHOME/
 RUN touch ~/.viminfo
 RUN chmod o+w ~/.viminfo
