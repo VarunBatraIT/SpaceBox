@@ -12,6 +12,8 @@
     # enable_language_specific_leader = false
     plugin_manager_max_processes = 2
     plugin_manager_processes = 2
+    enable_tabline_filetype_icon = true
+    guicolors = true
     vim_help_language = 'en'
     bootstrap_before = "myspacevim#before"
     bootstrap_after = "myspacevim#after"
