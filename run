@@ -1,6 +1,5 @@
 #!/bin/bash
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$GOBIN:~/.npm-global/bin
-export TMPDIR="/tmp"
 sudo cp ~/.npm-global/bin/* /usr/local/bin/
 git config --global user.name "$GIT_USERNAME"
 git config --global user.email "$GIT_EMAIL"
