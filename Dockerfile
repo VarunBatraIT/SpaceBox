@@ -10,7 +10,7 @@ ENV GOBIN="$GOROOT/bin"
 ENV GOPATH="$UHOME/src"
 ENV PATH="$PATH:$GOBIN:$GOROOT:$GOPATH/bin"
 ENV TZ=Europe/Minsk
-ENV PATH=~/.npm-global/bin:$PATH
+#ENV PATH=~/.npm-global/bin:$PATH
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN  apt-get update --fix-missing                               \
@@ -103,10 +103,10 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
     && sudo chown $UNAME:$UNAME -R /usr/local/lib \
     && sudo npm i -g npm@latest \
     && sudo chown $UNAME:$UNAME -R $UHOME \
-    && mkdir ~/.npm-global &&  npm config set prefix '~/.npm-global' \
-    && npm install --unsafe-perm -g sqlite3@4.0.6 \
-    && npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier vscode-html-languageserver-bin eslint_d typescript-formatter \
-    && npm install -g neovim \
+    # && mkdir ~/.npm-global &&  npm config set prefix '~/.npm-global' \
+    && sudo npm install --unsafe-perm -g sqlite3@4.0.6 \
+    && sudo npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier vscode-html-languageserver-bin eslint_d typescript-formatter \
+    && sudo npm install -g neovim \
     && sudo npm cache clean --force \
 # PIP more
 #RUN pip install --user python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
