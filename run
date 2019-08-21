@@ -1,6 +1,6 @@
 #!/bin/bash
-touch /tmp/viminfo
+touch /tmp/main.shada
 git config --global user.name "$GIT_USERNAME"
 git config --global user.email "$GIT_EMAIL"
 cd ~/src/
-stty stop '' -ixoff ; nvim $@
+stty stop '' -ixoff ; nvim -i /tmp/main.shada $@
