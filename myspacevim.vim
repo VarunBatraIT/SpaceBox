@@ -1,4 +1,5 @@
 function! myspacevim#before() abort
+  set viminfofile=/tmp/viminfo
   set updatetime=200
   set clipboard=unnamedplus
   let g:dein#install_max_processes=2
