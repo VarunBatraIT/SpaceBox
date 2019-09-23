@@ -129,7 +129,7 @@ RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook \
     && sudo chown -R spacevim:spacevim ~/.SpaceVim.d/ \
     && nvim --headless +'call dein#install()' +qall \
     # Clean up
-    # && sudo chown $UNAME:$UNAME -R /usr/lib/go/bin/ \
+    && sudo chown $UNAME:$UNAME -R /usr/lib/go/ \
     && cd ~/ && find . \( -name ".git" -o -name ".gitignore" -o -name ".gitmodules" -o -name ".gitattributes" \) -exec rm -rf -- {} + \
     && sudo apt-get clean all -y && sudo rm -rf /tmp/*
     #&&  composer clearcache
