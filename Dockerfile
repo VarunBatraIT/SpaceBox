@@ -36,6 +36,8 @@ USER spacevim
 
 WORKDIR /tmp
 
+RUN echo "Going for Dependencies"
+
 RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.3.5.linux.tar.gz && tar -xvzf gtm.v1.3.5.linux.tar.gz && sudo mv gtm /usr/local/bin && rm gtm.v1.3.5.linux.tar.gz \
       && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install && sudo cp ~/.fzf/bin/fzf /usr/local/bin/ \
       && sudo apt-get install -y golang \
@@ -80,9 +82,10 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
     && go build -o $GOBIN/iferr github.com/koron/iferr \
     && go get -v -u -d github.com/stamblerre/gocode \
     && go build -o $GOBIN/gocode github.com/stamblerre/gocode \
+    && cp $GOBIN/gocode $GOBIN/gocode-gomod \
     && go get -v -u -d github.com/sourcegraph/go-langserver \
     && go build -o $GOBIN/go-langserver github.com/sourcegraph/go-langserver \
-    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.16.0 \
+    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.18.0 \
     # PHP
     #&& sudo apt-get install -y --no-install-recommends  php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
     && sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
