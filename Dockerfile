@@ -118,7 +118,8 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
 # PIP more
 #RUN pip install --user python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
     && sudo apt-get install --no-install-recommends  python3-pip python-pip -y \
-    && sudo pip  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
+    && sudo pip  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client \
+    && sudo pip3  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client neovim-remote flake8 yapf autoflake isort coverage
 
 
 ENV PATH "$UHOME/.local/bin:${PATH}"
