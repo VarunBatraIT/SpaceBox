@@ -64,8 +64,8 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
     && go build -o $GOBIN/goimports golang.org/x/tools/cmd/goimports \
     && go get -v -u -d golang.org/x/lint/golint \
     && go build -o $GOBIN/golint golang.org/x/lint/golint \
-    && go get -v -u -d golang.org/x/tools/cmd/gopls \
-    && go build -o $GOBIN/gopls golang.org/x/tools/cmd/gopls \
+    && go get -v -u -d golang.org/x/tools/gopls \
+    && go build -o $GOBIN/gopls golang.org/x/tools/gopls \
     && go get -v -u -d github.com/alecthomas/gometalinter \
     && go build -o $GOBIN/gometalinter github.com/alecthomas/gometalinter \
     && go get -v -u -d github.com/fatih/gomodifytags \
@@ -119,7 +119,7 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
 #RUN pip install --user python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
     && sudo apt-get install --no-install-recommends  python3-pip python-pip -y \
     && sudo pip  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client \
-    && sudo pip3  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client neovim-remote
+
 
 ENV PATH "$UHOME/.local/bin:${PATH}"
 ENV GOPATH="$GOPATH:$UHOME/src/src:$UHOME/src/src/vendor"
