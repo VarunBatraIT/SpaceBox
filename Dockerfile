@@ -19,7 +19,7 @@ RUN  apt-get update --fix-missing                               \
     wamerican wbritish tidy xclip latexmk xsel cscope \
     sudo zlib1g wget curl \
     && apt-get clean all \ 
-    && cd /usr/src && git clone --branch v0.3.6 https://github.com/neovim/neovim.git && cd neovim \
+    && cd /usr/src && git clone --branch v0.4.3 https://github.com/neovim/neovim.git && cd neovim \
     && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
     && make install && rm -r /usr/src/neovim \
     && groupdel users  && groupadd -r -g 1000  spacevim \
