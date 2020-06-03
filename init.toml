@@ -10,6 +10,8 @@
 [options]
     # vimcompatible = true
     # enable_language_specific_leader = false
+    colorscheme = "molokai"
+    colorscheme_bg = "dark"
     plugin_manager_max_processes = 2
     plugin_manager_processes = 2
     enable_tabline_filetype_icon = true
@@ -22,6 +24,30 @@
     guifont = "SauceCodePro Nerd Font Mono:h11"
     disabled_plugins = ["phpcomplete.vim"]
     wildignore = "*.so,*.swp,*.zip,*.class,tags,*.jpg,*.ttf,*.TTF,*.png,*/target/*,.git,.svn,.hg,.DS_Store,*.svg"
+
+
+     # left sections of statusline
+    statusline_left_sections = [
+       'winnr',
+       'major mode',
+       'filename',
+       'fileformat',
+       'minor mode lighters',
+       'version control info',
+       'search status',
+       'syntax checking'
+    ]
+    # right sections of statusline
+    statusline_right_sections = [
+       'cursorpos',
+       'percentage',
+       'input method',
+       'date',
+       'time',
+       'battery status',
+       'input method'
+    ]
+
 
 # }}}
 

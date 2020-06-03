@@ -1,4 +1,4 @@
-FROM python:3.7.4-buster
+FROM python:3.8.3-buster
 #FROM ubuntu:18.04
 
 ENV DEBIAN_URL "http://ftp.us.debian.org/debian"
@@ -13,8 +13,8 @@ ENV TZ=Europe/Minsk
 #ENV PATH=~/.npm-global/bin:$PATH
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN  apt-get update --fix-missing                               \
-   && apt-get install --no-install-recommends -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
+RUN rm -rf /var/lib/apt/lis && apt-get clean all && apt-get update  -o Acquire::CompressionTypes::Order::=gz --fix-missing                               \
+    && apt-get install --no-install-recommends -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
     lua5.3 ninja-build pkg-config unzip xclip xfonts-utils exuberant-ctags \
     wamerican wbritish tidy xclip latexmk xsel cscope \
     sudo zlib1g wget curl \
