@@ -51,11 +51,11 @@
 
 # }}}
 
-# custom plugins {{{
 [[custom_plugins]]
-  name = 'ryanoasis/vim-devicons'
+  name = 'deoplete-plugins/deoplete-go'
   merged = 0
 # }}}
+
 
 # custom plugins {{{
 [[custom_plugins]]
@@ -65,11 +65,12 @@
   on_ft = 'php'
 # }}}
 
-# custom plugins {{{
+
 [[custom_plugins]]
   name = 'ryanoasis/vim-devicons'
   merged = 0
 # }}}
+
 # custom plugins {{{
 [[custom_plugins]]
   name = 'chr4/nginx.vim'
