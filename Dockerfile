@@ -11,7 +11,6 @@ ENV PATH="$PATH:$GOBIN:$GOROOT:$GOPATH/bin"
 ENV TZ=Europe/Minsk
 #ENV PATH=~/.npm-global/bin:$PATH
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-
     &&  rm -rf /var/lib/apt/list && apt-get clean all && apt-get update  -o Acquire::CompressionTypes::Order::=gz --fix-missing                               \
     && apt-get install --no-install-recommends -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
     lua5.3 ninja-build pkg-config unzip xclip xfonts-utils exuberant-ctags \
