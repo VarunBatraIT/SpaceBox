@@ -1,6 +1,4 @@
-# FROM python:3.7.7-buster
-FROM python:3.6.10-buster
-#FROM ubuntu:18.04
+FROM python:3.7.4-buster
 
 ENV DEBIAN_URL "http://ftp.us.debian.org/debian"
 ENV UHOME /home/spacevim
@@ -14,14 +12,14 @@ ENV TZ=Europe/Minsk
 #ENV PATH=~/.npm-global/bin:$PATH
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN rm -rf /var/lib/apt/lis && apt-get clean all && apt-get update  -o Acquire::CompressionTypes::Order::=gz --fix-missing                               \
+RUN rm -rf /var/lib/apt/list && apt-get clean all && apt-get update  -o Acquire::CompressionTypes::Order::=gz --fix-missing                               \
     && apt-get install --no-install-recommends -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
     lua5.3 ninja-build pkg-config unzip xclip xfonts-utils exuberant-ctags \
     wamerican wbritish tidy xclip latexmk xsel cscope \
     libpython3-dev \
     sudo zlib1g wget curl \
     && apt-get clean all \ 
-    && cd /usr/src && git clone --branch v0.4.2 https://github.com/neovim/neovim.git && cd neovim \
+    && cd /usr/src && git clone --branch v0.4.1 https://github.com/neovim/neovim.git && cd neovim \
     && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
     && make install && rm -r /usr/src/neovim \
     && groupdel users  && groupadd -r -g 1000  spacevim \
