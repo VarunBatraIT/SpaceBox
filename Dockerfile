@@ -40,8 +40,8 @@ RUN echo "Going for Dependencies"
 
 RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.3.5.linux.tar.gz && tar -xvzf gtm.v1.3.5.linux.tar.gz && sudo mv gtm /usr/local/bin && rm gtm.v1.3.5.linux.tar.gz \
       && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install && sudo cp ~/.fzf/bin/fzf /usr/local/bin/ \
-      && wget https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz \
-      && tar -xvf go1.14.4.linux-amd64.tar.gz \
+      && wget https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz \
+      && tar -xvf go1.13.1.linux-amd64.tar.gz \
       && sudo mv go /usr/lib \
       && cd /usr/lib/go && ls -lah \
       && sudo ln -snf /usr/lib/go/bin/go /usr/bin/go \
