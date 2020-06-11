@@ -1,5 +1,4 @@
-FROM python:3.7.4-buster
-#FROM ubuntu:18.04
+FROM python:3.8.3-buster
 
 ENV DEBIAN_URL "http://ftp.us.debian.org/debian"
 ENV UHOME /home/spacevim
@@ -11,17 +10,14 @@ ENV GOPATH="$UHOME/src"
 ENV PATH="$PATH:$GOBIN:$GOROOT:$GOPATH/bin"
 ENV TZ=Europe/Minsk
 #ENV PATH=~/.npm-global/bin:$PATH
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-RUN  apt-get update --fix-missing                               \
-   && apt-get install --no-install-recommends -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+    &&  rm -rf /var/lib/apt/list && apt-get clean all && apt-get update  -o Acquire::CompressionTypes::Order::=gz --fix-missing                               \
+    && apt-get install --no-install-recommends -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
     lua5.3 ninja-build pkg-config unzip xclip xfonts-utils exuberant-ctags \
     wamerican wbritish tidy xclip latexmk xsel cscope \
+    libpython3-dev \
     sudo zlib1g wget curl \
     && apt-get clean all \ 
-    && cd /usr/src && git clone --branch v0.4.3 https://github.com/neovim/neovim.git && cd neovim \
-    && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
-    && make install && rm -r /usr/src/neovim \
     && groupdel users  && groupadd -r -g 1000  spacevim \
     && useradd --create-home --home-dir $UHOME -u 1000 -r -g spacevim spacevim \
     && usermod -aG sudo spacevim \
@@ -118,6 +114,7 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
 # PIP more
 #RUN pip install --user python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
     && sudo apt-get install --no-install-recommends  python3-pip python-pip -y \
+    && sudo pip install --upgrade pip && sudo pip3 install --upgrade pip \
     && sudo pip  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client \
     && sudo pip3  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client neovim-remote flake8 yapf autoflake isort coverage
 
@@ -132,11 +129,13 @@ RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook \
     && git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim \
     && mv $UHOME/init.toml $UHOME/.SpaceVim.d/init.toml \
 #&& git checkout tags/v1.2.0
+    && cd ~/ && git clone https://github.com/neovim/neovim.git && cd neovim && git checkout e786583 \
+    && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
+    && sudo make install && rm -r ~/neovim \
     && curl -sLf https://spacevim.org/install.sh | bash \
     && mkdir -p $UHOME/.SpaceVim.d/autoload/ && mkdir -p $UHOME/.cache/SpaceVim/cscope/ \
     && sudo chown -R spacevim:spacevim ~/.SpaceVim.d/ \
     && nvim --headless +'call dein#install()' +qall \
-    # Clean up
     && sudo chown $UNAME:$UNAME -R /usr/lib/go/ \
     && cd ~/ && find . \( -name ".git" -o -name ".gitignore" -o -name ".gitmodules" -o -name ".gitattributes" \) -exec rm -rf -- {} + \
     && sudo apt-get clean all -y && sudo rm -rf /tmp/*
