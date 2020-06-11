@@ -37,6 +37,9 @@ RUN echo "Going for Dependencies"
 RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.3.5.linux.tar.gz && tar -xvzf gtm.v1.3.5.linux.tar.gz && sudo mv gtm /usr/local/bin && rm gtm.v1.3.5.linux.tar.gz \
       && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install && sudo cp ~/.fzf/bin/fzf /usr/local/bin/ \
       && wget https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz \
+      && cd ~/ && git clone https://github.com/neovim/neovim.git && cd neovim && git checkout e786583 \
+      && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
+      && sudo make install && rm -r ~/neovim \
       && tar -xvf go1.13.1.linux-amd64.tar.gz \
       && sudo mv go /usr/lib \
       && cd /usr/lib/go && ls -lah \
@@ -129,9 +132,6 @@ RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook \
     && git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim \
     && mv $UHOME/init.toml $UHOME/.SpaceVim.d/init.toml \
 #&& git checkout tags/v1.2.0
-    && cd ~/ && git clone https://github.com/neovim/neovim.git && cd neovim && git checkout e786583 \
-    && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
-    && sudo make install && rm -r ~/neovim \
     && curl -sLf https://spacevim.org/install.sh | bash \
     && mkdir -p $UHOME/.SpaceVim.d/autoload/ && mkdir -p $UHOME/.cache/SpaceVim/cscope/ \
     && sudo chown -R spacevim:spacevim ~/.SpaceVim.d/ \
