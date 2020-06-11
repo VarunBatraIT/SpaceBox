@@ -1,4 +1,5 @@
-FROM python:3.8.3-buster
+# FROM python:3.7.7-buster
+FROM python:3.6.10-buster
 #FROM ubuntu:18.04
 
 ENV DEBIAN_URL "http://ftp.us.debian.org/debian"
@@ -17,6 +18,7 @@ RUN rm -rf /var/lib/apt/lis && apt-get clean all && apt-get update  -o Acquire::
     && apt-get install --no-install-recommends -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
     lua5.3 ninja-build pkg-config unzip xclip xfonts-utils exuberant-ctags \
     wamerican wbritish tidy xclip latexmk xsel cscope \
+    libpython3-dev \
     sudo zlib1g wget curl \
     && apt-get clean all \ 
     && cd /usr/src && git clone --branch v0.4.2 https://github.com/neovim/neovim.git && cd neovim \
@@ -118,6 +120,7 @@ RUN sudo npm install --unsafe-perm -g sqlite3@4.0.6 \
 # PIP more
 #RUN pip install --user python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
 RUN sudo apt-get install --no-install-recommends  python3-pip python-pip -y \
+    && sudo pip install --upgrade pip && sudo pip3 install --upgrade pip \
     && sudo pip  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client \
     && sudo pip3  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client neovim-remote flake8 yapf autoflake isort coverage
 
@@ -132,11 +135,10 @@ RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook \
     && git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim \
     && mv $UHOME/init.toml $UHOME/.SpaceVim.d/init.toml
 #&& git checkout tags/v1.2.0
-RUN curl -sLf https://spacevim.org/install.sh | bash \
-    && mkdir -p $UHOME/.SpaceVim.d/autoload/ && mkdir -p $UHOME/.cache/SpaceVim/cscope/ \
+RUN curl -sLf https://spacevim.org/install.sh | bash
+RUN mkdir -p $UHOME/.SpaceVim.d/autoload/ && mkdir -p $UHOME/.cache/SpaceVim/cscope/ \
     && sudo chown -R spacevim:spacevim ~/.SpaceVim.d/ \
     && nvim --headless +'call dein#install()' +qall \
-    # Clean up
     && sudo chown $UNAME:$UNAME -R /usr/lib/go/ \
     && cd ~/ && find . \( -name ".git" -o -name ".gitignore" -o -name ".gitmodules" -o -name ".gitattributes" \) -exec rm -rf -- {} + \
     && sudo apt-get clean all -y && sudo rm -rf /tmp/*
