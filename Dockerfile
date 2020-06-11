@@ -10,18 +10,15 @@ ENV GOPATH="$UHOME/src"
 ENV PATH="$PATH:$GOBIN:$GOROOT:$GOPATH/bin"
 ENV TZ=Europe/Minsk
 #ENV PATH=~/.npm-global/bin:$PATH
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 
-RUN rm -rf /var/lib/apt/list && apt-get clean all && apt-get update  -o Acquire::CompressionTypes::Order::=gz --fix-missing                               \
+    &&  rm -rf /var/lib/apt/list && apt-get clean all && apt-get update  -o Acquire::CompressionTypes::Order::=gz --fix-missing                               \
     && apt-get install --no-install-recommends -y autoconf automake cmake fish g++ gettext git libtool libtool-bin \
     lua5.3 ninja-build pkg-config unzip xclip xfonts-utils exuberant-ctags \
     wamerican wbritish tidy xclip latexmk xsel cscope \
     libpython3-dev \
     sudo zlib1g wget curl \
     && apt-get clean all \ 
-    && cd /usr/src && git clone --branch v0.4.1 https://github.com/neovim/neovim.git && cd neovim \
-    && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
-    && make install && rm -r /usr/src/neovim \
     && groupdel users  && groupadd -r -g 1000  spacevim \
     && useradd --create-home --home-dir $UHOME -u 1000 -r -g spacevim spacevim \
     && usermod -aG sudo spacevim \
@@ -92,8 +89,8 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
     && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.18.0 \
     # PHP
     #&& sudo apt-get install -y --no-install-recommends  php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
-    && sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear
-RUN php -r "copy('https://getcomposer.org/download/1.8.4/composer.phar', 'composer.phar');" \
+    && sudo apt-get install -y php php-json php-mbstring php-common php-xml php-tokenizer php-curl php-xml php-msgpack php-pear \
+    && php -r "copy('https://getcomposer.org/download/1.8.4/composer.phar', 'composer.phar');" \
     && php -r "if (hash_file('sha256', 'composer.phar') === '1722826c8fbeaf2d6cdd31c9c9af38694d6383a0f2bf476fe6bbd30939de058a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer.phar'); } echo PHP_EOL;" \
     && chmod +x composer.phar \
     && sudo mv composer.phar /usr/local/bin/composer \
@@ -101,23 +98,23 @@ RUN php -r "copy('https://getcomposer.org/download/1.8.4/composer.phar', 'compos
     && composer global require phpmd/phpmd \
     && composer global require vimeo/psalm \
     && sudo pear channel-update pear.php.net \
-    && sudo pear install --alldeps PHP_Beautifier-beta
+    && sudo pear install --alldeps PHP_Beautifier-beta \
 # Install Node
-RUN sudo apt-get install --no-install-recommends  -y nodejs npm \
+    && sudo apt-get install --no-install-recommends  -y nodejs npm \
 # Install Node Related
     && sudo npm cache clean -f \
     && chown $UNAME:$UNAME -R $UHOME \
     && sudo chown $UNAME:$UNAME -R /usr/local/lib \
     && sudo npm i -g npm@latest \
-    && sudo chown $UNAME:$UNAME -R $UHOME 
+    && sudo chown $UNAME:$UNAME -R $UHOME \
     # && mkdir ~/.npm-global &&  npm config set prefix '~/.npm-global' \
-RUN sudo npm install --unsafe-perm -g sqlite3@4.0.6 \
+    && sudo npm install --unsafe-perm -g sqlite3@4.0.6 \
     && sudo npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier vscode-html-languageserver-bin eslint_d typescript-formatter tern \
     && sudo npm install -g neovim \
-    && sudo npm cache clean --force 
+    && sudo npm cache clean --force \
 # PIP more
 #RUN pip install --user python-language-server neovim pipenv pyaml ujson sexpdata websocket-client
-RUN sudo apt-get install --no-install-recommends  python3-pip python-pip -y \
+    && sudo apt-get install --no-install-recommends  python3-pip python-pip -y \
     && sudo pip install --upgrade pip && sudo pip3 install --upgrade pip \
     && sudo pip  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client \
     && sudo pip3  --no-cache-dir install python-language-server neovim pipenv pyaml ujson sexpdata websocket-client neovim-remote flake8 yapf autoflake isort coverage
@@ -131,10 +128,13 @@ COPY init.toml $UHOME/
 RUN mkdir -p $UHOME/.config $UHOME/.SpaceVim.d $UHOME/notebook \
     && git clone --branch 2.0 https://github.com/Shougo/dein.vim.git $HOME/.cache/vimfiles/repos/github.com/Shougo/dein.vim \
     && git clone https://github.com/SpaceVim/SpaceVim.git $UHOME/.SpaceVim && cd $UHOME/.SpaceVim \
-    && mv $UHOME/init.toml $UHOME/.SpaceVim.d/init.toml
+    && mv $UHOME/init.toml $UHOME/.SpaceVim.d/init.toml \
 #&& git checkout tags/v1.2.0
-RUN curl -sLf https://spacevim.org/install.sh | bash
-RUN mkdir -p $UHOME/.SpaceVim.d/autoload/ && mkdir -p $UHOME/.cache/SpaceVim/cscope/ \
+    && cd ~/ && git clone https://github.com/neovim/neovim.git && cd neovim && git checkout e786583 \
+    && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
+    && sudo make install && rm -r ~/neovim \
+    && curl -sLf https://spacevim.org/install.sh | bash \
+    && mkdir -p $UHOME/.SpaceVim.d/autoload/ && mkdir -p $UHOME/.cache/SpaceVim/cscope/ \
     && sudo chown -R spacevim:spacevim ~/.SpaceVim.d/ \
     && nvim --headless +'call dein#install()' +qall \
     && sudo chown $UNAME:$UNAME -R /usr/lib/go/ \
