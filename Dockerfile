@@ -39,7 +39,7 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
       && cd ~/ && git clone https://github.com/neovim/neovim.git && cd neovim && git checkout e786583 \
       && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=/usr/local" \
       && sudo make install && rm -r ~/neovim \
-      && wget https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz \
+      && cd ~/ && wget https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz \
       && tar -xvf go1.14.4.linux-amd64.tar.gz \
       && sudo mv go /usr/lib \
       && cd /usr/lib/go && ls -lah \
