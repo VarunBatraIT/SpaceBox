@@ -111,7 +111,7 @@ RUN wget https://github.com/git-time-metric/gtm/releases/download/v1.3.5/gtm.v1.
     && sudo chown $UNAME:$UNAME -R $UHOME \
     # && mkdir ~/.npm-global &&  npm config set prefix '~/.npm-global' \
     && sudo npm install --unsafe-perm -g sqlite3@4.0.6 \
-    && sudo npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier vscode-html-languageserver-bin eslint_d typescript-formatter tern remark remark-cli remark-stringify remark-frontmatter wcwidthprettier \
+    && sudo npm -g install --unsafe-perm typescript tslint eslint prettier javascript-typescript-langserver vscode-css-languageserver-bin bash-language-server purescript-language-server import-js eslint-plugin-prettier vscode-html-languageserver-bin eslint_d typescript-formatter tern remark remark-cli remark-stringify remark-frontmatter wcwidth \
     && sudo npm install -g neovim \
     && sudo npm cache clean --force \
 # PIP more
